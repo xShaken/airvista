@@ -30,6 +30,27 @@ namespace flight.Controllers
         {
             return View();
         }
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
+
+        public IActionResult CreateFlight()
+        {
+            return View();
+        }
+
+        public IActionResult Flights()
+        {
+            return View();
+        }
+
+        public IActionResult Airlines()
+        {
+            return View();
+        }
+
+
 
 
         [Authorize(Roles = "User")]
