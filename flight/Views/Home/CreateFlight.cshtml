@@ -1,4 +1,6 @@
-﻿@{
+﻿@model flight.Models.Flight
+
+@{
     ViewData["Title"] = "Create Flight";
 }
 
@@ -6,74 +8,78 @@
     <div class="card shadow-lg p-4">
         <h2 class="text-center text-uppercase fw-bold mb-4" style="color: #08385b;">Add Flight Details</h2>
 
-        <form>
+        <form asp-action="Create" asp-controller="Flight" method="post">
             <div class="row mb-3">
-                <!-- Departure Date & Time -->
                 <div class="col-md-6">
-                    <label for="departureDate" class="form-label fw-bold">Departure</label>
-                    <input type="date" class="form-control" id="departureDate" required>
+                    <label asp-for="DepartureDate" class="form-label fw-bold">Departure</label>
+                    <input asp-for="DepartureDate" type="date" class="form-control" required>
+                    <span asp-validation-for="DepartureDate" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
-                    <label for="departureTime" class="form-label fw-bold">&nbsp;</label>
-                    <input type="time" class="form-control" id="departureTime" required>
+                    <label asp-for="DepartureTime" class="form-label fw-bold">&nbsp;</label>
+                    <input asp-for="DepartureTime" type="time" class="form-control" required>
+                    <span asp-validation-for="DepartureTime" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="row mb-3">
-                <!-- Arrival Date & Time -->
                 <div class="col-md-6">
-                    <label for="arrivalDate" class="form-label fw-bold">Arrival</label>
-                    <input type="date" class="form-control" id="arrivalDate" required>
+                    <label asp-for="ArrivalDate" class="form-label fw-bold">Arrival</label>
+                    <input asp-for="ArrivalDate" type="date" class="form-control" required>
+                    <span asp-validation-for="ArrivalDate" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
-                    <label for="arrivalTime" class="form-label fw-bold">&nbsp;</label>
-                    <input type="time" class="form-control" id="arrivalTime" required>
+                    <label asp-for="ArrivalTime" class="form-label fw-bold">&nbsp;</label>
+                    <input asp-for="ArrivalTime" type="time" class="form-control" required>
+                    <span asp-validation-for="ArrivalTime" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="row mb-3">
-                <!-- From & To Dropdowns -->
                 <div class="col-md-6">
-                    <label for="fromLocation" class="form-label fw-bold">From</label>
-                    <select class="form-select" id="fromLocation" required>
+                    <label asp-for="FromLocation" class="form-label fw-bold">From</label>
+                    <select asp-for="FromLocation" class="form-select" required>
                         <option selected disabled>Choose departure location</option>
                         <option value="NYC">New York (NYC)</option>
                         <option value="LAX">Los Angeles (LAX)</option>
                         <option value="LON">London (LON)</option>
                     </select>
+                    <span asp-validation-for="FromLocation" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
-                    <label for="toLocation" class="form-label fw-bold">To</label>
-                    <select class="form-select" id="toLocation" required>
+                    <label asp-for="ToLocation" class="form-label fw-bold">To</label>
+                    <select asp-for="ToLocation" class="form-select" required>
                         <option selected disabled>Choose arrival location</option>
                         <option value="NYC">New York (NYC)</option>
                         <option value="LAX">Los Angeles (LAX)</option>
                         <option value="LON">London (LON)</option>
                     </select>
+                    <span asp-validation-for="ToLocation" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="row mb-3">
-                <!-- Duration & Price -->
                 <div class="col-md-6">
-                    <label for="duration" class="form-label fw-bold">Duration</label>
-                    <input type="text" class="form-control" id="duration" placeholder="e.g., 5h 30m" required>
+                    <label asp-for="Duration" class="form-label fw-bold">Duration</label>
+                    <input asp-for="Duration" type="text" class="form-control" placeholder="e.g., 5h 30m" required>
+                    <span asp-validation-for="Duration" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
-                    <label for="price" class="form-label fw-bold">Price</label>
-                    <input type="number" class="form-control" id="price" placeholder="Enter price" required>
+                    <label asp-for="Price" class="form-label fw-bold">Price</label>
+                    <input asp-for="Price" type="number" class="form-control" placeholder="Enter price" required>
+                    <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="mb-4">
-                <!-- Airline Selection -->
-                <label for="airline" class="form-label fw-bold">Select Airline</label>
-                <select class="form-select" id="airline" required>
+                <label asp-for="Airline" class="form-label fw-bold">Select Airline</label>
+                <select asp-for="Airline" class="form-select" required>
                     <option selected disabled>Choose an airline</option>
                     <option value="AA">American Airlines</option>
                     <option value="DL">Delta Airlines</option>
                     <option value="UA">United Airlines</option>
                 </select>
+                <span asp-validation-for="Airline" class="text-danger"></span>
             </div>
 
             <div class="text-center">
@@ -85,3 +91,6 @@
     </div>
 </div>
 
+@section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+}
