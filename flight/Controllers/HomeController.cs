@@ -1,16 +1,21 @@
+﻿using flight.Data;
 using flight.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace flight.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly AppDbContext _context;  // ✅ Use AppDbContext
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+       
+        public HomeController(AppDbContext context, ILogger<HomeController> logger)
         {
+            _context = context;
             _logger = logger;
         }
 
@@ -18,8 +23,8 @@ namespace flight.Controllers
         {
             return View();
         }
-        [Authorize]        
-        
+
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
@@ -30,6 +35,7 @@ namespace flight.Controllers
         {
             return View();
         }
+
         public IActionResult Dashboard()
         {
             return View();
@@ -47,10 +53,15 @@ namespace flight.Controllers
 
         public IActionResult Airlines()
         {
-            return View();
+            var airlines = _context.Airlines.ToList(); // ✅ Fetch airlines correctly
+            return View(airlines);
         }
 
-
+        public IActionResult Airports()
+        {
+            var airports = _context.Airports.ToList();
+            return View(airports);
+        }
 
 
         [Authorize(Roles = "User")]
@@ -58,8 +69,6 @@ namespace flight.Controllers
         {
             return View();
         }
-
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

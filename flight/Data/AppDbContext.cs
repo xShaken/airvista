@@ -8,8 +8,15 @@ namespace flight.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
+
         }
+
         // Add Flights table
         public DbSet<Flight> Flights { get; set; }
+
+        public DbSet<Airline> Airlines { get; set; }
+        public DbSet<Airport> Airports { get; set; }
+
+
     }
 }

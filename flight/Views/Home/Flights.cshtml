@@ -1,7 +1,110 @@
-﻿@{
-    ViewData["Title"] = "Flights";
+﻿@using flight.Data
+@model List<Flight>
+@inject AppDbContext _context;
 
+@{
+    ViewData["Title"] = "Flights";
+    var airlines = _context.Airlines.ToList();
+    var airports = _context.Airports.ToList();
 }
+
 <div class="text-center">
     <h1 class="display-4">Welcome to Flights</h1>
+</div>
+
+<div class="container">
+    <h2>Create Flight</h2>
+    <form method="post" asp-action="CreateFlight">
+        <div class="row">
+            <div class="col-md-6">
+                <label>Flight Code</label>
+                <input type="text" name="FlightCode" class="form-control" required />
+
+                <label>Airline</label>
+                <select name="AirlineId" class="form-control" required>
+                    <option value="">Select Airline</option>
+                    @foreach (var airline in airlines)
+                    {
+                        <option value="@airline.Id">@airline.Name</option>
+                    }
+                </select>
+
+                <label>Aircraft Code</label>
+                <input type="text" name="AircraftCode" class="form-control" required />
+
+                <label>From Airport</label>
+                <select name="FromAirportId" class="form-control" required>
+                    <option value="">Select Airport</option>
+                    @foreach (var airport in airports)
+                    {
+                        <option value="@airport.Id">@airport.Name</option>
+                    }
+                </select>
+
+                <label>To Airport</label>
+                <select name="ToAirportId" class="form-control" required>
+                    <option value="">Select Airport</option>
+                    @foreach (var airport in airports)
+                    {
+                        <option value="@airport.Id">@airport.Name</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label>Departure Date & Time</label>
+                <input type="datetime-local" name="DepartureDateTime" class="form-control" required />
+
+                <label>Estimated Arrival Date & Time</label>
+                <input type="datetime-local" name="EstimatedArrivalDateTime" class="form-control" required />
+
+                <label>Business Class Seats</label>
+                <input type="number" name="BusinessClassSeats" class="form-control" required />
+
+                <label>Business Class Price</label>
+                <input type="number" name="BusinessClassPrice" class="form-control" step="0.01" required />
+
+                <label>Economy Class Seats</label>
+                <input type="number" name="EconomyClassSeats" class="form-control" required />
+
+                <label>Economy Class Price</label>
+                <input type="number" name="EconomyClassPrice" class="form-control" step="0.01" required />
+
+                <label>First Class Seats</label>
+                <input type="number" name="FirstClassSeats" class="form-control" required />
+
+                <label>First Class Price</label>
+                <input type="number" name="FirstClassPrice" class="form-control" step="0.01" required />
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Create Flight</button>
+    </form>
+
+    <h2 class="mt-5">Existing Flights</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Flight Code</th>
+                <th>Airline</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Departure</th>
+                <th>Arrival</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var flight in Model)
+            {
+                <tr>
+                    <td>@flight.FlightCode</td>
+                    <td>@flight.Airline.Name</td>
+                    <td>@flight.FromAirport.Name</td>
+                    <td>@flight.ToAirport.Name</td>
+                    <td>@flight.DepartureDateTime</td>
+                    <td>@flight.EstimatedArrivalDateTime</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
