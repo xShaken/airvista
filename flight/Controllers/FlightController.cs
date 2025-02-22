@@ -1,4 +1,5 @@
-﻿using flight.Data;
+﻿
+using flight.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -31,8 +32,8 @@ public class FlightsController : Controller
         {
             _context.Flights.Add(flight);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Flights"); // Reloads Flights.cshtml
         }
         return View("Flights", _context.Flights.ToList());
-    }
+    }   
 }

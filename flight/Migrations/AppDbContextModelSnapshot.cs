@@ -22,66 +22,6 @@ namespace flight.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Flight", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AircraftCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("AirlineId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("BusinessClassPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("BusinessClassSeats")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DepartureDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("EconomyClassPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("EconomyClassSeats")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("EstimatedArrivalDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("FirstClassPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("FirstClassSeats")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FlightCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("FromAirportId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ToAirportId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AirlineId");
-
-                    b.HasIndex("FromAirportId");
-
-                    b.HasIndex("ToAirportId");
-
-                    b.ToTable("Flights");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -240,7 +180,7 @@ namespace flight.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Airlines");
+                    b.ToTable("Airlines", (string)null);
                 });
 
             modelBuilder.Entity("flight.Models.Airport", b =>
@@ -268,7 +208,51 @@ namespace flight.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Airports");
+                    b.ToTable("Airports", (string)null);
+                });
+
+            modelBuilder.Entity("flight.Models.Flight", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Airline")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ArrivalDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<TimeSpan>("ArrivalTime")
+                        .HasColumnType("time");
+
+                    b.Property<DateTime>("DepartureDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<TimeSpan>("DepartureTime")
+                        .HasColumnType("time");
+
+                    b.Property<string>("Duration")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FromLocation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ToLocation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Flights", (string)null);
                 });
 
             modelBuilder.Entity("flight.Models.Users", b =>
@@ -338,33 +322,6 @@ namespace flight.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Flight", b =>
-                {
-                    b.HasOne("flight.Models.Airline", "Airline")
-                        .WithMany()
-                        .HasForeignKey("AirlineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("flight.Models.Airport", "FromAirport")
-                        .WithMany()
-                        .HasForeignKey("FromAirportId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("flight.Models.Airport", "ToAirport")
-                        .WithMany()
-                        .HasForeignKey("ToAirportId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Airline");
-
-                    b.Navigation("FromAirport");
-
-                    b.Navigation("ToAirport");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

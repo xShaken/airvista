@@ -41,10 +41,7 @@ namespace flight.Controllers
             return View();
         }
 
-        public IActionResult CreateFlight()
-        {
-            return View();
-        }
+       
 
         public IActionResult Flights()
         {

@@ -4,17 +4,13 @@
 
 @{
     ViewData["Title"] = "Flights";
-    var airlines = _context.Airlines.ToList();
-    var airports = _context.Airports.ToList();
+    var airlines = _context.Airlines?.ToList() ?? new List<Airline>(); // Ensure no null
+    var airports = _context.Airports?.ToList() ?? new List<Airport>(); // Ensure no null
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome to Flights</h1>
-</div>
 
 <div class="container">
     <h2>Create Flight</h2>
-    <form method="post" asp-action="CreateFlight">
+    <form method="post" asp-action="Flights">
         <div class="row">
             <div class="col-md-6">
                 <label>Flight Code</label>
@@ -23,9 +19,12 @@
                 <label>Airline</label>
                 <select name="AirlineId" class="form-control" required>
                     <option value="">Select Airline</option>
-                    @foreach (var airline in airlines)
+                    @if (airlines.Any())
                     {
-                        <option value="@airline.Id">@airline.Name</option>
+                        @foreach (var airline in airlines)
+                        {
+                            <option value="@airline.Id">@airline.Name</option>
+                        }
                     }
                 </select>
 
@@ -35,18 +34,24 @@
                 <label>From Airport</label>
                 <select name="FromAirportId" class="form-control" required>
                     <option value="">Select Airport</option>
-                    @foreach (var airport in airports)
+                    @if (airports.Any())
                     {
-                        <option value="@airport.Id">@airport.Name</option>
+                        @foreach (var airport in airports)
+                        {
+                            <option value="@airport.Id">@airport.Name</option>
+                        }
                     }
                 </select>
 
                 <label>To Airport</label>
                 <select name="ToAirportId" class="form-control" required>
                     <option value="">Select Airport</option>
-                    @foreach (var airport in airports)
+                    @if (airports.Any())
                     {
-                        <option value="@airport.Id">@airport.Name</option>
+                        @foreach (var airport in airports)
+                        {
+                            <option value="@airport.Id">@airport.Name</option>
+                        }
                     }
                 </select>
             </div>
@@ -82,29 +87,37 @@
     </form>
 
     <h2 class="mt-5">Existing Flights</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Flight Code</th>
-                <th>Airline</th>
-                <th>From</th>
-                <th>To</th>
-                <th>Departure</th>
-                <th>Arrival</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var flight in Model)
-            {
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>@flight.FlightCode</td>
-                    <td>@flight.Airline.Name</td>
-                    <td>@flight.FromAirport.Name</td>
-                    <td>@flight.ToAirport.Name</td>
-                    <td>@flight.DepartureDateTime</td>
-                    <td>@flight.EstimatedArrivalDateTime</td>
+                    <th>Flight Code</th>
+                    <th>Airline</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Departure</th>
+                    <th>Arrival</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var flight in Model)
+                {
+                    <tr>
+                        <td>@flight.FlightCode</td>
+                        <td>@flight.Airline?.Name ?? "Unknown"</td>
+                        <td>@flight.FromAirport?.Name ?? "Unknown"</td>
+                        <td>@flight.ToAirport?.Name ?? "Unknown"</td>
+                        <td>@flight.DepartureDateTime</td>
+                        <td>@flight.EstimatedArrivalDateTime</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No flights available.</p>
+    }
 </div>
