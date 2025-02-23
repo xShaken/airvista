@@ -1,4 +1,4 @@
-﻿@using flight.Data
+﻿﻿@using flight.Data
 @model List<Flight>
 @inject AppDbContext _context;
 
@@ -10,7 +10,9 @@
 
 <div class="container">
     <h2>Create Flight</h2>
-    <form method="post" asp-action="Flights">
+    <form method="post" asp-action="Create" asp-controller="Flight">
+        <input type="hidden" name="DateAdded" value="@DateTime.Now" />
+
         <div class="row">
             <div class="col-md-6">
                 <label>Flight Code</label>
@@ -19,12 +21,9 @@
                 <label>Airline</label>
                 <select name="AirlineId" class="form-control" required>
                     <option value="">Select Airline</option>
-                    @if (airlines.Any())
+                    @foreach (var airline in airlines)
                     {
-                        @foreach (var airline in airlines)
-                        {
-                            <option value="@airline.Id">@airline.Name</option>
-                        }
+                        <option value="@airline.Id">@airline.Name</option>
                     }
                 </select>
 
@@ -34,24 +33,18 @@
                 <label>From Airport</label>
                 <select name="FromAirportId" class="form-control" required>
                     <option value="">Select Airport</option>
-                    @if (airports.Any())
+                    @foreach (var airport in airports)
                     {
-                        @foreach (var airport in airports)
-                        {
-                            <option value="@airport.Id">@airport.Name</option>
-                        }
+                        <option value="@airport.Id">@airport.Name</option>
                     }
                 </select>
 
                 <label>To Airport</label>
                 <select name="ToAirportId" class="form-control" required>
                     <option value="">Select Airport</option>
-                    @if (airports.Any())
+                    @foreach (var airport in airports)
                     {
-                        @foreach (var airport in airports)
-                        {
-                            <option value="@airport.Id">@airport.Name</option>
-                        }
+                        <option value="@airport.Id">@airport.Name</option>
                     }
                 </select>
             </div>
@@ -85,6 +78,8 @@
 
         <button type="submit" class="btn btn-primary mt-3">Create Flight</button>
     </form>
+
+
 
     <h2 class="mt-5">Existing Flights</h2>
 

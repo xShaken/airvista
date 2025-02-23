@@ -1,39 +1,75 @@
-﻿
-using flight.Data;
+﻿using flight.Data;
+using flight.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-public class FlightsController : Controller
+namespace flight.Controllers
 {
-    private readonly AppDbContext _context;
-
-    public FlightsController(AppDbContext context)
+    public class FlightController : Controller
     {
-        _context = context;
-    }
+        private readonly AppDbContext _context;
 
-    public IActionResult Index()
-    {
-        var flights = _context.Flights
-            .Include(f => f.Airline)
-            .Include(f => f.FromAirport)
-            .Include(f => f.ToAirport)
-            .ToList();
-        return View("Flights", flights);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CreateFlight(Flight flight)
-    {
-        if (ModelState.IsValid)
+        public FlightController(AppDbContext context)
         {
-            _context.Flights.Add(flight);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Flights"); // Reloads Flights.cshtml
+            _context = context;
         }
-        return View("Flights", _context.Flights.ToList());
-    }   
+
+        public IActionResult Index()
+        {
+            var airlines = _context.Airlines.ToList();
+            var airports = _context.Airports.ToList();
+
+            ViewBag.Airlines = airlines;
+            ViewBag.Airports = airports;
+
+            var flights = _context.Flights
+                .Include(f => f.Airline)
+                .Include(f => f.FromAirport)
+                .Include(f => f.ToAirport)
+                .OrderByDescending(f => f.DateAdded)
+                .AsNoTracking()
+                .ToList();
+
+            return View("~/Views/Home/Flights.cshtml", flights);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("FlightCode, AirlineId, AircraftCode, FromAirportId, ToAirportId, DepartureDateTime, EstimatedArrivalDateTime, BusinessClassSeats, BusinessClassPrice, EconomyClassSeats, EconomyClassPrice, FirstClassSeats, FirstClassPrice")] Flight flight)
+        {
+            if (ModelState.IsValid)
+            {
+                flight.DateAdded = DateTime.Now;
+                _context.Flights.Add(flight);
+                await _context.SaveChangesAsync();
+                Console.WriteLine("Flight saved successfully.");
+                return RedirectToAction("Index"); // Redirect after saving
+            }
+
+            Console.WriteLine("ModelState is invalid:");
+            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+            {
+                Console.WriteLine($"Error: {error.ErrorMessage}");
+            }
+
+            // Reload dropdown lists to avoid errors
+            ViewBag.Airlines = _context.Airlines.ToList();
+            ViewBag.Airports = _context.Airports.ToList();
+
+            var flights = _context.Flights
+                .Include(f => f.Airline)
+                .Include(f => f.FromAirport)
+                .Include(f => f.ToAirport)
+                .OrderByDescending(f => f.DateAdded)
+                .AsNoTracking()
+                .ToList();
+
+            return View("~/Views/Home/Flights.cshtml", flights);
+        }
+
+
+    }
 }
